@@ -6,7 +6,6 @@
     <title>Location Tracker</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Include the leaflet-gpx script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.0/gpx.min.js"></script>
     <style>
         #map {
@@ -42,7 +41,6 @@
     </div>
     <div id="latest-coordinates">Loading latest coordinates...</div>
     <div id="map"></div>
-
     <div id="debug-message">Debug: Waiting for actions...</div>
 
     <script>
@@ -113,13 +111,13 @@
                 L.marker(latestCoords).addTo(map);
             }
 
-            // Load and display the GPX file without start/end markers and with green color
+            // Load and display the GPX file
             new L.GPX('route.gpx', {
                 async: true,
                 polyline_options: {
                     color: 'green', // Set route color to green
-                    weight: 4,      // Optional: Adjust the thickness of the route
-                    opacity: 0.9    // Optional: Adjust the opacity of the route
+                    weight: 4,
+                    opacity: 0.9
                 },
                 marker_options: {
                     startIconUrl: '', // Remove start marker by setting to empty
@@ -128,12 +126,11 @@
                 }
             }).on('loaded', function(e) {
                 map.fitBounds(e.target.getBounds());
-                // Update debug message on successful GPX load
                 document.getElementById('debug-message').innerText += '\nGPX file loaded successfully.';
+                console.log('GPX File:', e.target); // Log the GPX data
             }).on('error', function(e) {
-                // Update debug message on GPX load error
+                console.error('Error loading GPX file:', e.error.message);
                 document.getElementById('debug-message').innerText += '\nError loading GPX file: ' + e.error.message;
-                console.error('Error loading GPX file:', e);
             }).addTo(map);
         }
 
