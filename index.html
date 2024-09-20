@@ -36,7 +36,7 @@
 </head>
 <body>
     <div id="header-container">
-        <h1>Wheres Wallace.?</h1>
+        <h1>Wheres Wallace</h1>
         <button id="refresh-button">Refresh</button>
     </div>
     <div id="latest-coordinates">Loading latest coordinates...</div>
@@ -50,7 +50,7 @@
             let debugInfo = '';
 
             try {
-                let response = await fetch(${BASE_URL}/add-coordinates, {
+                let response = await fetch(`${BASE_URL}/add-coordinates`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,23 +58,23 @@
                     body: JSON.stringify({ lat, lon }),
                 });
 
-                debugInfo += Response status: '${response.status}'\n;
+                debugInfo += `Response status: '${response.status}'\n`;
 
                 let result;
                 try {
                     result = await response.json();
-                    debugInfo += Response JSON: '${JSON.stringify(result)}'\n;
+                    debugInfo += `Response JSON: '${JSON.stringify(result)}'\n`;
                 } catch (jsonError) {
-                    debugInfo += JSON parse error: '${jsonError.message}'\n;
+                    debugInfo += `JSON parse error: '${jsonError.message}'\n`;
                 }
 
                 if (!response.ok) {
-                    throw new Error(HTTP error! Status: ${response.status} - ${response.statusText});
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
                 }
 
-                document.getElementById('debug-message').innerText = Debug: ${result.message};
+                document.getElementById('debug-message').innerText = `Debug: ${result.message}`;
             } catch (error) {
-                debugInfo += Debug: Error sending coordinates - ${error}\n;
+                debugInfo += `Debug: Error sending coordinates - ${error}\n`;
             }
 
             document.getElementById('debug-message').innerText += debugInfo;
@@ -138,10 +138,10 @@
             let debugInfo = '';
 
             try {
-                let response = await fetch(${BASE_URL}/get-coordinates);
+                let response = await fetch(`${BASE_URL}/get-coordinates`);
 
                 if (!response.ok) {
-                    throw new Error(HTTP error! Status: ${response.status} - ${response.statusText});
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
                 }
 
                 let data = await response.text();
@@ -151,14 +151,14 @@
                     let latestCoords = coordinates[coordinates.length - 1];
                     let lat = latestCoords[0];
                     let lon = latestCoords[1];
-                    document.getElementById('latest-coordinates').innerHTML = <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">View latest location on Google Maps</a>;
+                    document.getElementById('latest-coordinates').innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">View latest location on Google Maps</a>`;
                 } else {
                     document.getElementById('latest-coordinates').innerText = 'No coordinates available.';
                 }
 
                 initMap(coordinates);
             } catch (error) {
-                debugInfo += Debug: Error loading coordinates - ${error.message}\n;
+                debugInfo += `Debug: Error loading coordinates - ${error.message}\n`;
                 document.getElementById('debug-message').innerText = debugInfo;
             }
         }
@@ -169,7 +169,7 @@
             const { lat, lon } = getQueryParams();
 
             if (lat && lon) {
-                document.getElementById('debug-message').innerText = Debug: Sending coordinates (${lat}, ${lon}) to the server...;
+                document.getElementById('debug-message').innerText = `Debug: Sending coordinates (${lat}, ${lon}) to the server...`;
                 await sendCoordinates(lat, lon);
             }
 
