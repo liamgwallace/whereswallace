@@ -36,7 +36,7 @@
 </head>
 <body>
     <div id="header-container">
-        <h1>Wheres Wallace?</h1>
+        <h1>Wheres Wallace</h1>
         <button id="refresh-button">Refresh</button>
     </div>
     <div id="latest-coordinates">Loading latest coordinates...</div>
@@ -97,7 +97,7 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // Load and display the GPX file
+            // Load and display the GPX file first
             new L.GPX('route.gpx', {
                 async: true,
                 polyline_options: {
@@ -114,12 +114,21 @@
                 map.fitBounds(e.target.getBounds());
                 document.getElementById('debug-message').innerText += '\nGPX file loaded successfully.';
                 console.log('GPX File:', e.target); // Log the GPX data
+
+                // After GPX is loaded, plot the other coordinates and the latest position marker
+                plotCoordinates(map, coordinates, latestCoords);
+
             }).on('error', function(e) {
                 console.error('Error loading GPX file:', e.error.message);
                 document.getElementById('debug-message').innerText += '\nError loading GPX file: ' + e.error.message;
+
+                // In case of GPX error, still plot the coordinates
+                plotCoordinates(map, coordinates, latestCoords);
             }).addTo(map);
         }
 
+        // Function to plot blue circle markers and latest position
+        function plotCoordinates(map, coordinates, latestCoords) {
             // Plot each coordinate as a circle
             coordinates.forEach(coord => {
                 L.circle([parseFloat(coord[0]), parseFloat(coord[1])], {
@@ -130,9 +139,11 @@
                 }).addTo(map);
             });
 
+            // Plot the latest position as a marker
             if (coordinates.length > 0) {
                 L.marker(latestCoords).addTo(map);
             }
+        }
 
         async function fetchCoordinates() {
             let debugInfo = '';
