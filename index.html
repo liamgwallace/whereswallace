@@ -97,20 +97,6 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // Plot each coordinate as a circle
-            coordinates.forEach(coord => {
-                L.circle([parseFloat(coord[0]), parseFloat(coord[1])], {
-                    color: 'blue',
-                    fillColor: '#30a3dc',
-                    fillOpacity: 0.5,
-                    radius: 40
-                }).addTo(map);
-            });
-
-            if (coordinates.length > 0) {
-                L.marker(latestCoords).addTo(map);
-            }
-
             // Load and display the GPX file
             new L.GPX('route.gpx', {
                 async: true,
@@ -133,6 +119,20 @@
                 document.getElementById('debug-message').innerText += '\nError loading GPX file: ' + e.error.message;
             }).addTo(map);
         }
+
+            // Plot each coordinate as a circle
+            coordinates.forEach(coord => {
+                L.circle([parseFloat(coord[0]), parseFloat(coord[1])], {
+                    color: 'blue',
+                    fillColor: '#30a3dc',
+                    fillOpacity: 0.5,
+                    radius: 40
+                }).addTo(map);
+            });
+
+            if (coordinates.length > 0) {
+                L.marker(latestCoords).addTo(map);
+            }
 
         async function fetchCoordinates() {
             let debugInfo = '';
